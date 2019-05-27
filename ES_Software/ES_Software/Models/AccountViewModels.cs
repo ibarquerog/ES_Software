@@ -5,13 +5,12 @@ using System.ComponentModel.DataAnnotations;
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
+        [Display(Name = "Usuario")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Contrasña")]
         public string Password { get; set; }
 
         [Display(Name = "Administrador")]

@@ -1,0 +1,83 @@
+﻿@model ES_Software.Models.AdminModelRecursos
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@{
+    ViewBag.Title = "AdminRecursos";
+}
+@using (Html.BeginForm("AdminIngresarRecurso", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h2>Ingresar nuevo recurso</h2>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.nombreRecurso, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.nombreRecurso, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.tipoRecurso, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.tipoRecurso, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.correo, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.correo, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.telefono, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.telefono, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.provincia, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.provincia, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Aceptar" />
+        </div>
+    </div>
+}
+
+<h2>Recursos</h2>
+<div class="form-horizontal">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID Recurso</th>
+                <th>Tipo de Recurso</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Provincia</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                <tr>
+                    <th scope="row" `>Uno</th>
+                    <td>Dos</td>
+                    <td>Tres</td>
+                    <td>Cuatro</td>
+                    <td>Cinco</td>
+                    <td>Seis</td>
+                    <td>@Html.ActionLink("Editar", "Editar", "Admin", new { id = 5 }, null)</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
+
+

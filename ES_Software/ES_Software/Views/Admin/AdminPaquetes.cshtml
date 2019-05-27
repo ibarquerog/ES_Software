@@ -1,0 +1,41 @@
+﻿@model ES_Software.Models.AdminModelPaquetes
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@{
+    ViewBag.Title = "AdminPaquetes";
+}
+
+<h2>Paquetes</h2>
+<div class="form-horizontal">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID Recurso</th>
+                <th>Tipo de Recurso</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Correo</th>
+                <th>Provincia</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                <tr>
+                    <th scope="row" `>Uno</th>
+                    <td>Dos</td>
+                    <td>Tres</td>
+                    <td>Cuatro</td>
+                    <td>Cinco</td>
+                    <td>Seis</td>
+                    <td>@Html.ActionLink("Editar", "Editar", "Admin", new { id = 5 }, null)</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
+

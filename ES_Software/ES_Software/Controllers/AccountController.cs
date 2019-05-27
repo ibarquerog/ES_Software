@@ -9,6 +9,10 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ES_Software.Models;
+using System.Net.Mail;
+using System.Net;
+using System.Web.Mail;
+using System.Text;
 
 namespace ES_Software.Controllers
 {
@@ -33,8 +37,45 @@ namespace ES_Software.Controllers
         [AllowAnonymous]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            return View("../Home/Index");
+            if (!model.Admin)
+            {
+                return View("../Client/Historial");
+            }
+            else
+            {
+                return View("../Admin/AdminHistorial");
+             }
+            
         }
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Editar(string returnUrl, string id)
+        {
+
+            ViewBag.ReturnUrl = returnUrl;
+            var sClient = new SmtpClient("smtp-mail.outlook.com");
+            var message = new System.Net.Mail.MailMessage();
+
+            sClient.Port = 587;
+            sClient.Host = "smtp.office365.com";
+            sClient.EnableSsl = true;
+            sClient.UseDefaultCredentials = false;
+            sClient.EnableSsl = false;
+            sClient.Credentials = new NetworkCredential("es.eventos.rs@outlook.com", "Eseventos");
+            sClient.UseDefaultCredentials = false;
+
+            message.Body = "Test";
+            message.From = new MailAddress("es.eventos.rs@outlook.com");
+            message.Subject = "Test";
+            message.CC.Add(new MailAddress("ibarqueroga@gmail.com"));
+
+            sClient.Send(message);
+
+
+            return View("Historial");
+
+        }
+
 
 
         [AllowAnonymous]
@@ -50,9 +91,5 @@ namespace ES_Software.Controllers
         {
             return View();
         }
-
-  
-
-      
     }
 }

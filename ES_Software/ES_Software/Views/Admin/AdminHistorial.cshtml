@@ -1,0 +1,39 @@
+﻿@model ES_Software.Models.AdminModelHistorial
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@{
+    ViewBag.Title = "AdminHistorial";
+}
+
+<h2>Historial de Reservaciones</h2>
+
+<div class="form-horizontal">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID Reservacion</th>
+                <th>Cedula Cliente</th>
+                <th>ID Paquete</th>
+                <th>Fecha</th>
+                <th>Fecha Contratación</th>
+                <th>Hora Contratación</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                <tr>
+                    <th scope="row" `>Uno</th>
+                    <td>Dos</td>
+                    <td>Tres</td>
+                    <td>Cuatro</td>
+                    <td>Cinco</td>
+                    <td>Seis</td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+
+</div>
