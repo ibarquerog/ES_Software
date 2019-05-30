@@ -27,10 +27,10 @@ namespace ES_Software.Controllers
         {
             return View();  
         }
-        [HttpPost]
-        public ActionResult AdminIngresarRecurso(ES_Software.Models.AdminModelRecursos model)
+        
+        public ActionResult AdminIngresarRecurso(ES_Software.Models.AdminModelRecursos model, IList<string> MyCheckboxes)
         {
-            return View();
+            return View("AdminRecursos");
         }
         public ActionResult AdminEditarRecurso()
         {
@@ -42,35 +42,22 @@ namespace ES_Software.Controllers
         }
         public ActionResult AdminEditarPaquete()
         {
-            return View();
+            return View("AdminPaquetes");
         }
     
-        public ActionResult Editar(string returnUrl, string id)
+        public ActionResult EditarRecurso(string returnUrl, string id)
         {
 
-            ViewBag.ReturnUrl = returnUrl;
-            var sClient = new SmtpClient("smtp-mail.outlook.com");
-            var message = new System.Net.Mail.MailMessage();
+            return View("AdminPaquetes");
 
-            sClient.Port = 587;
-            sClient.Host = "smtp.office365.com";
-            sClient.EnableSsl = true;
-            sClient.UseDefaultCredentials = false;
-            sClient.EnableSsl = false;
-            sClient.Credentials = new NetworkCredential("es.eventos.rs@outlook.com", "Eseventos");
-            sClient.UseDefaultCredentials = false;
-
-            message.Body = "Test";
-            message.From = new MailAddress("es.eventos.rs@outlook.com");
-            message.Subject = "Test";
-            message.CC.Add(new MailAddress("ibarqueroga@gmail.com"));
-
-            sClient.Send(message);
-
-
+        }
+        
+        public ActionResult EliminarRecurso(string returnUrl, string id)
+        {
             return View("AdminHistorial");
 
         }
+
 
     }
 }

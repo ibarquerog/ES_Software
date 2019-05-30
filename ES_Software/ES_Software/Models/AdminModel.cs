@@ -20,7 +20,6 @@ namespace ES_Software.Models
     }
     public class AdminModelRecursos
     {
-        [Required]
         [Display(Name = "Nombre")]
         public string nombreRecurso { get; set; }
 
@@ -42,6 +41,9 @@ namespace ES_Software.Models
     }
     public class AdminModelPaquetes
     {
-      
+  
+        [Display(Name = "Nombre")]
+        public string nombrePaquete { get; set; }
+
     }
 }

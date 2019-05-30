@@ -1,41 +1,108 @@
 ﻿@model ES_Software.Models.AdminModelPaquetes
 
 @{
+    /**/
+
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 @{
     ViewBag.Title = "AdminPaquetes";
 }
+@using (Html.BeginForm("AdminIngresarRecurso", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h2>Ingresar nuevo Paquete</h2>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.nombrePaquete, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.nombrePaquete, new { @class = "form-control" })
+        </div>
+    </div>
 
-<h2>Paquetes</h2>
-<div class="form-horizontal">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID Recurso</th>
-                <th>Tipo de Recurso</th>
-                <th>Nombre</th>
-                <th>Teléfono</th>
-                <th>Correo</th>
-                <th>Provincia</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
+    <h4>Seleccionar Productos</h4>
+    <div class="form-horizontal">
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <th scope="row" `>Uno</th>
-                    <td>Dos</td>
-                    <td>Tres</td>
-                    <td>Cuatro</td>
-                    <td>Cinco</td>
-                    <td>Seis</td>
-                    <td>@Html.ActionLink("Editar", "Editar", "Admin", new { id = 5 }, null)</td>
+                    <th>ID Recurso</th>
+                    <th>Tipo de Recurso</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo</th>
+                    <th>Provincia</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
+            </thead>
+            <tbody>
+                @{
+                    <tr>
+                        <th scope="row" `>Uno</th>
+                        <td>Dos</td>
+                        <td>Tres</td>
+                        <td>Cuatro</td>
+                        <td>Cinco</td>
+                        <td>Seis</td>
+                        <td><input type="checkbox" name="MyCheckboxes" value="1"> </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" `>Uno</th>
+                        <td>Dos</td>
+                        <td>Tres</td>
+                        <td>Cuatro</td>
+                        <td>Cinco</td>
+                        <td>Seis</td>
+                        <td><input type="checkbox" name="MyCheckboxes" value="2"> </td>
+                    </tr>
+                }
+            </tbody>
 
-    </table>
+        </table>
 
-</div>
+    </div>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Aceptar" />
+        </div>
+    </div>
+}
+@using (Html.BeginForm("AdminIngresarRecurso", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <h2>Paquetes disponibles</h2>
+    <div class="form-horizontal">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Paquete</th>
+                    <th>Nombre</th>
+                    <th>Precio total</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    <tr>
+                        <th scope="row" `>Uno</th>
+                        <td>Dos</td>
+                        <td>Tres</td>
+                        <td>@Html.ActionLink("Ver paquete", "Editar", "Admin", new { id = 5 }, null)</td>
+                        <td>@Html.ActionLink("Editar", "Editar", "Admin", new { id = 5 }, null)</td>
+                        <td>@Html.ActionLink("Eliminar", "Editar", "Admin", new { id = 5 }, null)</td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+}
 

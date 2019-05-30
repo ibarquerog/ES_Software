@@ -25,9 +25,14 @@ namespace ES_Software.Controllers
         public ActionResult Editar(string returnUrl, string id)
         {
 
+            return View("Historial");
 
+        }
+        public ActionResult EnviarCorreo(string returnUrl,string id)
+        {
+            ViewBag.ReturnUrl = returnUrl;
             var sClient = new SmtpClient("smtp-mail.outlook.com");
-            var message = new MailMessage();
+            var message = new System.Net.Mail.MailMessage();
 
             sClient.Port = 587;
             sClient.Host = "smtp.office365.com";
@@ -45,9 +50,9 @@ namespace ES_Software.Controllers
             sClient.Send(message);
 
 
-            return View("Historial");
-
+            return View("Reservar");
         }
+
         [AllowAnonymous]
         public ActionResult Reservar(string returnUrl, string id)
         {
