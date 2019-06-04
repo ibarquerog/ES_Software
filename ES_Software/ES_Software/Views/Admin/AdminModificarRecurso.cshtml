@@ -1,0 +1,48 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
+
+
+@model ES_Software.Models.AdminModelRecursosModificar
+@{
+    Layout = "~/Views/Shared/_DetallesLayout.cshtml";
+}
+@{
+    ViewBag.Title = "AdminModificarRecurso";
+}
+@using (Html.BeginForm("AdminModificarRecurso", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h2>Modificar recurso </h2>
+    <h4>@ES_Software.Controllers.AdminController.Recurso</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.correo, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.correo, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.telefono, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.telefono, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.provincia, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.provincia, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Aceptar" />
+        </div>
+    </div>
+
+
+}
+
+
+

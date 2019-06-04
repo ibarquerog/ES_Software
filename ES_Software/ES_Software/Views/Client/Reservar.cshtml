@@ -1,4 +1,8 @@
-﻿@model ES_Software.Models.ClientModelReservar
+﻿@model ES_Software.Models.ClientReservar
+@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
+
 @{
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
 }
@@ -8,38 +12,79 @@
 
 <h2>@ViewBag.Title.</h2>
 
-@using (Html.BeginForm("Reservar", "Client", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-{
-    @Html.AntiForgeryToken()
-    <h4></h4>
-}
+@using (Html.BeginForm("ReservarPaquete", "Client", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+
+{@Html.AntiForgeryToken()
+<hr />
+@Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="form-group">
+    @Html.LabelFor(m => m.Fecha, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Fecha, new { @class = "form-control" })
+    </div>
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Hora, new { @class = "col-md-2 control-label" })
+    <div class="col-md-10">
+        @Html.TextBoxFor(m => m.Hora, new { @class = "form-control" })
+    </div>
+</div>
+
+
+<h2>Paquetes disponibles</h2>
 <div class="form-horizontal">
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID Reservacion</th>
-                <th>Cedula Cliente</th>
                 <th>ID Paquete</th>
-                <th>Fecha</th>
-                <th>Fecha Contratación</th>
-                <th>Hora Contratación</th>
+                <th>Nombre</th>
+                <th>Precio</th>
+                <th></th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @{
-                <tr>
-                    <th scope="row" `>Uno</th>
-                    <td>Dos</td>
-                    <td>Tres</td>
-                    <td>Cuatro</td>
-                    <td>Cinco</td>
-                    <td>Seis</td>
-                    <td>@Html.ActionLink("Editar", "Editar", "Account", new { id = 5 }, null)</td>
-                </tr>
+                SqlDataAdapter da;
+                DataSet ds = new DataSet();
+                SqlConnection con = new SqlConnection();
+                con.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                SqlCommand cmd = new SqlCommand("retornarPaquetes", con);
+                da = new SqlDataAdapter(cmd);
+                da.Fill(ds);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                if (!object.Equals(ds.Tables[0], null))
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+                            <tr>
+                                <th scope="row">@ds.Tables[0].Rows[i]["IdPaquete"]</th>
+                                <td>@ds.Tables[0].Rows[i]["Nombre"]</td>
+                                <td>@ds.Tables[0].Rows[i]["PrecioTotal"]</td>
+                                <td>@Html.ActionLink("Detalles", "MostrarDetalles", "Client", new { paquete = @ds.Tables[0].Rows[i]["IdPaquete"] }, null)</td>
+                                <td><input type="checkbox" name="MyCheckboxes" value="@ds.Tables[0].Rows[i]["IdPaquete"]"> </td>
+
+                            </tr>
+                        }
+
+
+                    }
+                }
+
             }
+
+
         </tbody>
 
     </table>
-
 </div>
+<div class="form-group">
+    <div class="col-md-offset-2 col-md-10">
+        <input type="submit" class="btn btn-default" value="Reservar" />
+    </div>
+</div>
+}

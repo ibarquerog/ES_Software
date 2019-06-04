@@ -20,6 +20,20 @@ namespace ES_Software.Models
     }
     public class ClientModelEditarReservaciones
     {
+        [Display(Name = "Fecha (yyyy/mm/dd)")]
+        public string Fecha { get; set; }
 
+
+        [Display(Name = "Hora (24 hrs)")]
+        public string Hora { get; set; }
+    }
+    public class ClientReservar
+    {
+        [Display(Name = "Fecha (yyyy/mm/dd)")]
+        public string Fecha { get; set; }
+
+
+        [Display(Name = "Hora (24 hrs)")]
+        public string Hora { get; set; }
     }
 }

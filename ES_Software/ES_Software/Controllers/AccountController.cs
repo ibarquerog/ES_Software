@@ -13,12 +13,17 @@ using System.Net.Mail;
 using System.Net;
 using System.Web.Mail;
 using System.Text;
+using System.Data.SqlClient;
+using System.Data;
 
 namespace ES_Software.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        static string usario_ctivo = "";
+
+        public static string Usario_ctivo { get => usario_ctivo; set => usario_ctivo = value; }
 
         public AccountController()
         {
@@ -37,15 +42,81 @@ namespace ES_Software.Controllers
         [AllowAnonymous]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            if (!model.Admin)
+            if (model.Admin)
             {
-                return View("../Client/Historial");
+
+                SqlConnection conexion = new SqlConnection("Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True");
+                SqlCommand cmd = new SqlCommand("LoginAdministrador", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@nombreUsuario", System.Data.SqlDbType.VarChar, 50).Value = model.Email.ToString();
+                cmd.Parameters.Add("@clave", System.Data.SqlDbType.VarChar, 50).Value = model.Password.ToString();
+                cmd.Parameters.Add("@retValue", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.ReturnValue;
+
+                try
+                {
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    conexion.Close();
+                    conexion.Dispose();
+                }
+                int retval = (int)cmd.Parameters["@retValue"].Value;
+                if (retval == 0)
+                {
+                    return Content("<script language='javascript' type='text/javascript'>alert     ('Error: Usuario o contraseña incorrecto ');</script>");
+                }
+                else
+                {
+                    return View("../Admin/AdminHistorial");
+                }
+                
+
             }
             else
             {
-                return View("../Admin/AdminHistorial");
-             }
+                SqlConnection conexion = new SqlConnection("Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True");
+                SqlCommand cmd = new SqlCommand("LoginCliente", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@nombreUsuario", System.Data.SqlDbType.VarChar, 50).Value = model.Email.ToString();
+                cmd.Parameters.Add("@clave", System.Data.SqlDbType.VarChar, 50).Value = model.Password.ToString();
+                cmd.Parameters.Add("@retValue", System.Data.SqlDbType.Int).Direction = System.Data.ParameterDirection.ReturnValue;
+
+                try
+                {
+                    conexion.Open();
+                    cmd.ExecuteNonQuery();
+
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    conexion.Close();
+                    conexion.Dispose();
+                }
+                int retval = (int)cmd.Parameters["@retValue"].Value;
+                if (retval == 0)
+                {
+                    
+                    return Content("<script language='javascript' type='text/javascript'>alert     ('Error: Usuario o contraseña incorrecto ');</script>");
+                }
+                else
+                {
+                    usario_ctivo = model.Email.ToString();
+                    return View("../Client/Historial");
+                }
+            }
             
+
         }
         [HttpPost]
         [AllowAnonymous]
@@ -53,27 +124,7 @@ namespace ES_Software.Controllers
         {
 
             ViewBag.ReturnUrl = returnUrl;
-            var sClient = new SmtpClient("smtp-mail.outlook.com");
-            var message = new System.Net.Mail.MailMessage();
-
-            sClient.Port = 587;
-            sClient.Host = "smtp.office365.com";
-            sClient.EnableSsl = true;
-            sClient.UseDefaultCredentials = false;
-            sClient.EnableSsl = false;
-            sClient.Credentials = new NetworkCredential("es.eventos.rs@outlook.com", "Eseventos");
-            sClient.UseDefaultCredentials = false;
-
-            message.Body = "Test";
-            message.From = new MailAddress("es.eventos.rs@outlook.com");
-            message.Subject = "Test";
-            message.CC.Add(new MailAddress("ibarqueroga@gmail.com"));
-
-            sClient.Send(message);
-
-
             return View("Historial");
-
         }
 
 
@@ -81,6 +132,7 @@ namespace ES_Software.Controllers
         [AllowAnonymous]
         public ActionResult Register (string returnUrl)
         {
+            
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -89,6 +141,32 @@ namespace ES_Software.Controllers
         [AllowAnonymous]
         public ActionResult Register(ClientRegisterViewModel model)
         {
+            SqlConnection conexion = new SqlConnection("Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True");
+            SqlCommand cmd = new SqlCommand("RegistrarCliente", conexion);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.Add("@Nombre", System.Data.SqlDbType.VarChar, 50).Value = model.Name.ToString();
+            cmd.Parameters.Add("@Usuario", System.Data.SqlDbType.VarChar,50).Value = model.User.ToString();
+            cmd.Parameters.Add("@Clave", System.Data.SqlDbType.VarChar, 50).Value = model.Password.ToString();
+            cmd.Parameters.Add("@Cedula", System.Data.SqlDbType.BigInt).Value = Int32.Parse(model.clientID.ToString());
+            cmd.Parameters.Add("@Telefono", System.Data.SqlDbType.BigInt).Value = Int32.Parse(model.clientID.ToString());
+            cmd.Parameters.Add("@Direccion", System.Data.SqlDbType.VarChar, 50).Value = "------";
+            cmd.Parameters.Add("@Correo", System.Data.SqlDbType.VarChar, 50).Value = model.Email.ToString();
+
+            try
+            {
+                conexion.Open();
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            finally
+            {
+                conexion.Close();
+                conexion.Dispose();
+            }
             return View();
         }
     }

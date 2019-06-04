@@ -1,4 +1,8 @@
-﻿@model ES_Software.Models.AdminModelPaquetes
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
+
+@model ES_Software.Models.AdminModelPaquetes
 
 @{
     /**/
@@ -8,9 +12,10 @@
 @{
     ViewBag.Title = "AdminPaquetes";
 }
-@using (Html.BeginForm("AdminIngresarRecurso", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("AdminIngresarPaquete", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
+
     <h2>Ingresar nuevo Paquete</h2>
     <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
@@ -21,46 +26,60 @@
         </div>
     </div>
 
+
     <h4>Seleccionar Productos</h4>
     <div class="form-horizontal">
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>ID Recurso</th>
-                    <th>Tipo de Recurso</th>
+                    <th>ID Producto</th>
+                    <th>Id Recurso</th>
                     <th>Nombre</th>
-                    <th>Teléfono</th>
-                    <th>Correo</th>
-                    <th>Provincia</th>
+                    <th>Disponible</th>
+                    <th>Precio</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @{
-                    <tr>
-                        <th scope="row" `>Uno</th>
-                        <td>Dos</td>
-                        <td>Tres</td>
-                        <td>Cuatro</td>
-                        <td>Cinco</td>
-                        <td>Seis</td>
-                        <td><input type="checkbox" name="MyCheckboxes" value="1"> </td>
-                    </tr>
-                    <tr>
-                        <th scope="row" `>Uno</th>
-                        <td>Dos</td>
-                        <td>Tres</td>
-                        <td>Cuatro</td>
-                        <td>Cinco</td>
-                        <td>Seis</td>
-                        <td><input type="checkbox" name="MyCheckboxes" value="2"> </td>
-                    </tr>
+                    SqlDataAdapter da;
+                    DataSet ds = new DataSet();
+                    SqlConnection con = new SqlConnection();
+                    con.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                    SqlCommand cmd = new SqlCommand("retornarProductos", con);
+                    da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    if (!object.Equals(ds.Tables[0], null))
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@ds.Tables[0].Rows[i]["IdProducto"]</th>
+                                    <td>@ds.Tables[0].Rows[i]["IdRecurso"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Nombre"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Disponible"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Precio"]</td>
+                                    <td><input type="checkbox" name="MyCheckboxes" value="@ds.Tables[0].Rows[i]["Nombre"]"> </td>
+                                </tr>
+                            }
+
+
+                        }
+                    }
+
                 }
+
+
             </tbody>
 
         </table>
-
     </div>
+
 
 
     <div class="form-group">
@@ -80,29 +99,48 @@
                 <tr>
                     <th>ID Paquete</th>
                     <th>Nombre</th>
-                    <th>Precio total</th>
-                    <th></th>
-                    <th></th>
+                    <th>Precio</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @{
-                    <tr>
-                        <th scope="row" `>Uno</th>
-                        <td>Dos</td>
-                        <td>Tres</td>
-                        <td>@Html.ActionLink("Ver paquete", "Editar", "Admin", new { id = 5 }, null)</td>
-                        <td>@Html.ActionLink("Editar", "Editar", "Admin", new { id = 5 }, null)</td>
-                        <td>@Html.ActionLink("Eliminar", "Editar", "Admin", new { id = 5 }, null)</td>
+                    SqlDataAdapter da;
+                    DataSet ds = new DataSet();
+                    SqlConnection con = new SqlConnection();
+                    con.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                    SqlCommand cmd = new SqlCommand("retornarPaquetes", con);
+                    da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    if (!object.Equals(ds.Tables[0], null))
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@ds.Tables[0].Rows[i]["IdPaquete"]</th>
+                                    <td>@ds.Tables[0].Rows[i]["Nombre"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["PrecioTotal"]</td>
+                                    <td>@Html.ActionLink("Eliminar", "EliminarPaquete", "Admin", new { id = ds.Tables[0].Rows[i]["IdPaquete"] }, null)</td>
+                                </tr>
+                            }
 
-                    </tr>
+
+                        }
+                    }
+
                 }
+
+
             </tbody>
 
         </table>
-
     </div>
+
 
 }
 

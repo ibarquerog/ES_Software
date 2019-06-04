@@ -1,4 +1,7 @@
 ﻿@model ES_Software.Models.ClientModelHistorial
+@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
 @{
     Layout = "~/Views/Shared/_ClientLayout.cshtml";
 }
@@ -13,29 +16,58 @@
     @Html.AntiForgeryToken()
     <h4>Historial de reservaciones</h4>
 }
+
 <div class="form-horizontal">
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>ID Reservacion</th>
-                <th>Cedula Cliente</th>
-                <th>ID Paquete</th>
-                <th>Fecha</th>
-                <th>Fecha Contratación</th>
-                <th>Hora Contratación</th>
+                <th>Codigo Producto</th>
+                <th>Recurso</th>
+                <th>Producto</th>
+                <th>Numero Reservacion</th>
+                <th>Cliente</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             @{
-                <tr>
-                    <th scope="row" `>Uno</th>
-                    <td>Dos</td>
-                    <td>Tres</td>
-                    <td>Cuatro</td>
-                    <td>Cinco</td>
-                    <td>Seis</td>
-                </tr>
+                string usuario =  ES_Software.Controllers.AccountController.Usario_ctivo;
+                SqlDataAdapter da;
+                DataSet ds = new DataSet();
+                SqlConnection con = new SqlConnection();
+                con.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                SqlCommand cmd = new SqlCommand("HistorialReservacionesCliente", con);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@nombreCliente", System.Data.SqlDbType.VarChar, 50).Value = usuario.ToString();
+
+                da = new SqlDataAdapter(cmd);
+                da.Fill(ds);
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+                if (!object.Equals(ds.Tables[0], null))
+                {
+                    if (ds.Tables[0].Rows.Count > 0)
+                    {
+                        for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                        {
+            <tr>
+                <th scope="row">@ds.Tables[0].Rows[i]["Codigo Producto"]</th>
+                <td>@ds.Tables[0].Rows[i]["Recurso"]</td>
+                <td>@ds.Tables[0].Rows[i]["Producto"]</td>
+                <td>@ds.Tables[0].Rows[i]["Numero Reservacion"]</td>
+                <td>@ds.Tables[0].Rows[i]["Cliente"]</td>
+                <td>@Html.ActionLink("Editar", "ModificarReservaciones", "Client", new { id = @ds.Tables[0].Rows[i]["Numero Reservacion"] }, null)</td>
+                <td>@Html.ActionLink("Eliminar", "EliminarReservacion", "Client", new { id = @ds.Tables[0].Rows[i]["Numero Reservacion"] }, null)</td>
+
+            </tr>
+                        }
+
+                    }
+                }
             }
+
+
         </tbody>
 
     </table>

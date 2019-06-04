@@ -1,0 +1,94 @@
+﻿@model ES_Software.Models.ClientModelEditarReservaciones
+@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
+@{
+    Layout = "~/Views/Shared/_DetallesLayout.cshtml";
+}
+@{
+    ViewBag.Title = "ModificarReservacion";
+}
+
+
+
+@using (Html.BeginForm("ModificarReservacion", "Client", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h2>Modificar Reservacion</h2>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Fecha, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Fecha, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Hora, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Hora, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Aceptar" />
+        </div>
+    </div>
+        }
+    <h2>Detalles Reservacion</h2>
+
+    <div class="form-horizontal">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Codigo Producto</th>
+                    <th>Recurso</th>
+                    <th>Producto</th>
+                    <th>Numero Reservacion</th>
+                    <th>Cliente</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    string usuario = ES_Software.Controllers.AccountController.Usario_ctivo;
+                    SqlDataAdapter da;
+                    DataSet ds = new DataSet();
+                    SqlConnection con = new SqlConnection();
+                    con.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                    SqlCommand cmd = new SqlCommand("reservacionEspecifica", con);
+                    string reservacion = ES_Software.Controllers.ClientController.ReservacionActual;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@nombreCliente", System.Data.SqlDbType.VarChar,50).Value = ES_Software.Controllers.AccountController.Usario_ctivo;
+                    cmd.Parameters.Add("@idReservacion", System.Data.SqlDbType.Int).Value = int.Parse(reservacion);
+                    da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    if (!object.Equals(ds.Tables[0], null))
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@ds.Tables[0].Rows[i]["Codigo Producto"]</th>
+                                    <td>@ds.Tables[0].Rows[i]["Recurso"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Producto"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Numero Reservacion"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Cliente"]</td>
+
+                                </tr>
+                            }
+
+                        }
+                    }
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+        

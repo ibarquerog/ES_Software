@@ -1,0 +1,155 @@
+﻿@using System.Data.SqlClient;
+@using System.Configuration;
+@using System.Data;
+
+
+@model ES_Software.Models.AdminProductosModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@{
+    ViewBag.Title = "AdminRecursos";
+}
+@using (Html.BeginForm("AdminIngresarProducto", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h2>Ingresar nuevo producto</h2>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Nombre, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Disponible, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Disponible, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Precio, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Precio, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <h4>Recursos Disponibles</h4>
+    ///--------------------------------------------------------------------------------------------------------------------------//
+    <div class="form-horizontal">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Recurso</th>
+                    <th>Id Tipo Recurso</th>
+                    <th>Nombre</th>
+                    <th>Telefono</th>
+                    <th>Correo</th>
+                    <th>Provincia</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    SqlDataAdapter da;
+                    DataSet ds = new DataSet();
+                    SqlConnection con = new SqlConnection();
+                    con.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                    SqlCommand cmd = new SqlCommand("retornarRecursos", con);
+                    da = new SqlDataAdapter(cmd);
+                    da.Fill(ds);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    if (!object.Equals(ds.Tables[0], null))
+                    {
+                        if (ds.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds.Tables[0].Rows.Count; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@ds.Tables[0].Rows[i]["IdRecurso"]</th>
+                                    <td>@ds.Tables[0].Rows[i]["IdTipoRecurso"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Nombre"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Telefono"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Correo"]</td>
+                                    <td>@ds.Tables[0].Rows[i]["Provincia"]</td>
+                                    <td><input type="checkbox" name="MyCheckboxes" value="@ds.Tables[0].Rows[i]["IdRecurso"]"> </td>
+                                </tr>
+                            }
+
+
+                        }
+                    }
+                }
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Aceptar" />
+        </div>
+    </div>
+
+    <h2>Productos Disponibles</h2>
+    <div class="form-horizontal">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID Producto</th>
+                    <th>Id Recurso</th>
+                    <th>Nombre</th>
+                    <th>Disponible</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    SqlDataAdapter da2;
+                    DataSet ds2 = new DataSet();
+                    SqlConnection con2 = new SqlConnection();
+                    con2.ConnectionString = "Data Source=DESKTOP-2OQBEMO;Initial Catalog=ESSoftware;Integrated Security=True";
+                    SqlCommand cmd2 = new SqlCommand("retornarProductos", con2);
+                    da2 = new SqlDataAdapter(cmd2);
+                    da2.Fill(ds2);
+                    con2.Open();
+                    cmd2.ExecuteNonQuery();
+                    con2.Close();
+                    if (!object.Equals(ds2.Tables[0], null))
+                    {
+                        if (ds2.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < ds2.Tables[0].Rows.Count; i++)
+                            {
+                                <tr>
+                                    <th scope="row">@ds2.Tables[0].Rows[i]["IdProducto"]</th>
+                                    <td>@ds2.Tables[0].Rows[i]["IdRecurso"]</td>
+                                    <td>@ds2.Tables[0].Rows[i]["Nombre"]</td>
+                                    <td>@ds2.Tables[0].Rows[i]["Disponible"]</td>
+                                    <td>@ds2.Tables[0].Rows[i]["Precio"]</td>
+                                </tr>
+                            }
+
+
+                        }
+                    }
+
+                }
+
+
+            </tbody>
+
+        </table>
+    </div>
+}
+
+
+
+
+

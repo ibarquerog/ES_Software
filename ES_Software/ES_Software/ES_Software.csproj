@@ -263,6 +263,12 @@
     <Content Include="Views\Admin\AdminHistorial.cshtml" />
     <Content Include="Views\Admin\AdminRecursos.cshtml" />
     <Content Include="Views\Admin\AdminPaquetes.cshtml" />
+    <Content Include="Views\Admin\AdminRegistroAdministradores.cshtml" />
+    <Content Include="Views\Client\MostrarDetalles.cshtml" />
+    <Content Include="Views\Shared\_DetallesLayout.cshtml" />
+    <Content Include="Views\Client\ModificarReservacion.cshtml" />
+    <Content Include="Views\Admin\AdminProductos.cshtml" />
+    <Content Include="Views\Admin\AdminModificarRecurso.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
